@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OZON 定价存档 · 实时</title>
+<style>
+:root{--bg:#f6f7f9;--panel:#fff;--ink:#101418;--ink-2:#5b6572;--ink-3:#8b95a3;--line:#e4e8ee;--line-2:#eef1f5;--green:#0a8f5b;--red:#e0342b;--amber:#b7791f;--brand:#1a6dff;--radius:14px}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1400px;margin:0 auto;padding:24px 22px 60px}
+
+/* 登录 */
+.login{max-width:380px;margin:14vh auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px 26px;box-shadow:0 10px 40px rgba(16,20,24,.09)}
+.login h1{font-size:19px;margin:0 0 6px}
+.login p{font-size:12.5px;color:var(--ink-2);margin:0 0 20px}
+.login input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:14px;outline:none;margin-bottom:10px}
+.login input:focus{border-color:var(--brand);box-shadow:0 0 0 3px #eef4ff}
+.login button{width:100%;padding:11px;border:none;border-radius:10px;background:var(--ink);color:#fff;font:inherit;font-size:14px;font-weight:650;cursor:pointer}
+.login button:hover{background:#2a3340}
+.login .err{color:var(--red);font-size:12.5px;margin-top:10px;min-height:18px}
+
+/* 头部 */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+h1.title{font-size:21px;margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--ink-2);font-size:12.5px}
+.sub b{color:var(--ink)}
+.live{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px;background:#e8f7f0;color:var(--green);vertical-align:2px;margin-left:6px}
+.live i{width:6px;height:6px;border-radius:99px;background:var(--green);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:7px 12px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:.13s;white-space:nowrap}
+.btn:hover{border-color:#c3ccd8;background:#fafbfd}
+.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.primary:hover{background:#2a3340}
+
+/* 统计 */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.st{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:0 1px 2px rgba(16,20,24,.04)}
+.st .t{font-size:11px;color:var(--ink-3)}
+.st .n{font-size:22px;font-weight:750;letter-spacing:-.01em;font-variant-numeric:tabular-nums;margin-top:2px}
+
+/* 工具栏 */
+.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.toolbar input[type=text]{padding:7px 12px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:12.5px;outline:none;width:200px;background:#fff}
+.toolbar select{padding:7px 10px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:12.5px;outline:none;background:#fff}
+.sp{flex:1}
+.cnt{font-size:12px;color:var(--ink-3)}
+
+/* 卡片 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.pcard{border:1px solid var(--line);border-radius:13px;background:#fff;overflow:hidden;transition:.15s;position:relative}
+.pcard:hover{box-shadow:0 4px 16px rgba(16,20,24,.08);border-color:#c9d3e0}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:12px 14px 10px;border-bottom:1px solid var(--line-2)}
+.pn{font-size:14px;font-weight:700;line-height:1.35;word-break:break-all}
+.pm{font-size:10.5px;color:var(--ink-3);margin-top:3px;font-variant-numeric:tabular-nums}
+.pp{text-align:right;white-space:nowrap}
+.pp .v{font-size:20px;font-weight:750;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.pp .s{font-size:10.5px;color:var(--ink-3)}
+.pb{padding:10px 14px 12px}
+.mini-bar{display:flex;height:9px;border-radius:99px;overflow:hidden;background:var(--line-2);margin:2px 0 8px}
+.mini-bar i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:10px;color:var(--ink-2);margin-bottom:9px}
+.legend span{display:inline-flex;align-items:center;gap:3px}
+.legend em{width:6px;height:6px;border-radius:2px;display:inline-block}
+.prow{display:flex;justify-content:space-between;font-size:11.5px;padding:2.5px 0;color:var(--ink-2)}
+.prow b{color:var(--ink);font-variant-numeric:tabular-nums;font-weight:650}
+.pf{display:flex;gap:6px;padding:0 14px 12px}
+.pf button{flex:1;border:1px solid var(--line);background:#fff;border-radius:7px;padding:5px 0;font:inherit;font-size:11px;font-weight:600;color:var(--ink-2);cursor:pointer}
+.pf button:hover{background:#fafbfd;color:var(--ink);border-color:#c3ccd8}
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px}
+.badge.g{background:#e8f7f0;color:var(--green)}.badge.a{background:#fff7e6;color:var(--amber)}.badge.r{background:#fdeceb;color:var(--red)}
+.badge.new{position:absolute;top:0;right:0;border-radius:0 13px 0 9px;background:var(--brand);color:#fff;padding:2px 8px;font-size:9.5px}
+.empty{padding:44px 16px;text-align:center;color:var(--ink-3);font-size:13px;grid-column:1/-1}
+.foot{margin-top:24px;font-size:11.5px;color:var(--ink-3);line-height:1.7}
+/* 编辑弹层 */
+.modal{position:fixed;inset:0;background:rgba(16,20,24,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal.on{display:flex}
+.modal .box{background:#fff;border-radius:16px;width:100%;max-width:560px;max-height:88vh;overflow:auto;padding:22px}
+.modal h3{margin:0 0 4px;font-size:16px}
+.modal .hint{font-size:11.5px;color:var(--ink-3);margin-bottom:14px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fgrid label{display:block;font-size:11px;color:var(--ink-2);margin-bottom:3px}
+.fgrid input{width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;outline:none;font-variant-numeric:tabular-nums}
+.fgrid input:focus{border-color:var(--brand)}
+.modal .acts{display:flex;gap:8px;margin-top:18px}
+.modal .acts button{flex:1;padding:9px;border-radius:9px;font:inherit;font-size:13px;font-weight:650;cursor:pointer;border:1px solid var(--line);background:#fff}
+.modal .acts .save{background:var(--ink);color:#fff;border-color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#12181f;color:#fff;padding:9px 18px;border-radius:99px;font-size:12.5px;font-weight:600;z-index:99;opacity:0;transition:.25s;pointer-events:none}
+.toast.on{opacity:1}
+@media (max-width:640px){.grid{grid-template-columns:1fr}.wrap{padding:16px 12px 40px}h1.title{font-size:18px}}
+</style>
+</head>
+<body>
+
+<!-- 登录 -->
+<div id="loginView" class="login">
+  <h1>OZON 定价存档</h1>
+  <p>请输入访问密码查看实时存档</p>
+  <input id="pwd" type="password" placeholder="访问密码" autocomplete="current-password">
+  <button id="btnLogin">进入</button>
+  <div class="err" id="loginErr"></div>
+</div>
+
+<!-- 主界面 -->
+<div id="mainView" class="wrap" style="display:none">
+  <div class="top">
+    <div>
+      <h1 class="title">OZON 定价存档<span class="live"><i></i>实时</span></h1>
+      <div class="sub" id="subLine">加载中…</div>
+    </div>
+    <div class="top-actions">
+      <button class="btn primary" id="btnAdd">＋ 新增产品</button>
+      <button class="btn" id="btnImportFile">导入备份 JSON</button>
+      <input type="file" id="fileImport" accept=".json" style="display:none">
+      <button class="btn" id="btnExportCsv">导出 CSV</button>
+      <button class="btn" id="btnRefresh">刷新</button>
+      <button class="btn" id="btnLogout">退出</button>
+    </div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="toolbar">
+    <input id="q" type="text" placeholder="搜索产品名 / 渠道…">
+    <select id="sort">
+      <option value="new">按保存时间（新→旧）</option>
+      <option value="marginDesc">按利润率（高→低）</option>
+      <option value="marginAsc">按利润率（低→高）</option>
+      <option value="priceAsc">按售价（低→高）</option>
+      <option value="priceDesc">按售价（高→低）</option>
+      <option value="name">按名称</option>
+    </select>
+    <span class="sp"></span>
+    <span class="cnt" id="cnt"></span>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="foot">
+    本页面为实时存档：任何设备登录后看到的是同一份数据，修改立即生效。数据保存在服务器本地 JSON 文件，建议定期「导出 CSV」另存一份。<br>
+    利润占比 = 利润 ÷ 售价；利润 = 售价 − 中国运费 − 深圳本地运费 − 采购价 − 售价×(佣金+收岸费+提现+物流佣金)。
+  </div>
+</div>
+
+<!-- 编辑弹层 -->
+<div class="modal" id="modal">
+  <div class="box">
+    <h3 id="mTitle">编辑产品定价</h3>
+    <div class="hint">修改后保存即同步到服务器，所有设备立即可见</div>
+    <div class="fgrid" id="mFields"></div>
+    <div class="acts">
+      <button id="mCancel">取消</button>
+      <button class="save" id="mSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '';
+let TOKEN = localStorage.getItem('ozon_server_token') || '';
+let DATA = [];
+let pollTimer = null;
+let knownIds = new Set();
+let firstLoad = true;
+
+const $ = id => document.getElementById(id);
+const fmt = (x,d=2)=> (x==null||isNaN(x))?'—':Number(x).toLocaleString('zh-CN',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmt0 = x => fmt(x,0);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const mcls = m => m==null?'a':(m>=0.28?'g':(m>=0.15?'a':'r'));
+
+function toast(msg){
+  const t = $('toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(t._tm); t._tm = setTimeout(()=>t.classList.remove('on'), 2000);
+}
+
+/* ---------- 网络 ---------- */
+async function api(path, opts={}){
+  const headers = Object.assign({'Content-Type':'application/json'}, opts.headers||{});
+  if (TOKEN) headers['Authorization'] = 'Bearer ' + TOKEN;
+  const r = await fetch(API + path, Object.assign({}, opts, {headers}));
+  if (r.status === 401){ showLogin(); throw new Error('未登录'); }
+  const ct = r.headers.get('content-type')||'';
+  const data = ct.includes('json') ? await r.json() : await r.text();
+  if (!r.ok) throw new Error((data && data.error) || ('HTTP '+r.status));
+  return data;
+}
+
+/* ---------- 登录 ---------- */
+function showLogin(){
+  $('mainView').style.display='none';
+  $('loginView').style.display='block';
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+  $('pwd').focus();
+}
+async function login(){
+  const pwd = $('pwd').value;
+  if (!pwd) { $('loginErr').textContent='请输入密码'; return; }
+  $('loginErr').textContent='';
+  try{
+    const r = await fetch(API + '/api/login', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({password: pwd})
+    });
+    const d = await r.json();
+    if (!r.ok) { $('loginErr').textContent = d.error || '登录失败'; return; }
+    TOKEN = d.token;
+    localStorage.setItem('ozon_server_token', TOKEN);
+    enterMain();
+  }catch(e){
+    $('loginErr').textContent = '连接服务器失败：' + e.message;
+  }
+}
+$('btnLogin').addEventListener('click', login);
+$('pwd').addEventListener('keydown', e=>{ if (e.key === 'Enter') login(); });
+
+function enterMain(){
+  $('loginView').style.display='none';
+  $('mainView').style.display='block';
+  load(true);
+  startPoll();
+}
+
+/* ---------- 数据 ---------- */
+async function load(silent){
+  try{
+    const db = await api('/api/archive');
+    DATA = db.items || [];
+    // 标记新记录
+    const newIds = [];
+    if (!firstLoad){
+      DATA.forEach(a=>{ if (!knownIds.has(a.id)) newIds.push(a.id); });
+    }
+    knownIds = new Set(DATA.map(a=>a.id));
+    render(newIds);
+    const ts = db.updatedAt ? new Date(db.updatedAt) : new Date();
+    $('subLine').innerHTML = `共 <b>${DATA.length}</b> 个产品 · 最后更新 ${ts.toLocaleString('zh-CN')} · 数据存储于服务器`;
+    if (!silent && newIds.length) toast(`有 ${newIds.length} 条新存档`);
+    firstLoad = false;
+  }catch(e){
+    if (e.message !== '未登录') toast('加载失败：' + e.message);
+  }
+}
+
+function startPoll(){
+  if (pollTimer) clearInterval(pollTimer);
+  pollTimer = setInterval(()=>{
+    if (document.hidden) return;   // 页面不可见时暂停
+    load(true);
+  }, 15000);                       // 每 15 秒同步一次
+  document.addEventListener('visibilitychange', ()=>{
+    if (!document.hidden) load(true);
+  });
+}
+
+/* ---------- 渲染 ---------- */
+function render(newIds=[]){
+  const kw = ($('q').value||'').trim().toLowerCase();
+  let list = DATA.filter(a=> !kw
+    || (a.name||'').toLowerCase().includes(kw)
+    || (a.channelCN||'').toLowerCase().includes(kw));
+
+  // 统计基于全量
+  const total = DATA.length;
+  const avg = total ? DATA.reduce((s,a)=>s+(a.margin||0),0)/total : 0;
+  const sumProfit = DATA.reduce((s,a)=>s+(a.profit||0),0);
+  const prices = DATA.map(a=>a.priceCNY||0);
+  $('stats').innerHTML = `
+    <div class="st"><div class="t">产品数量</div><div class="n">${total}</div></div>
+    <div class="st"><div class="t">平均利润率</div><div class="n" style="color:${avg>=0.28?'var(--green)':'var(--amber)'}">${(avg*100).toFixed(1)}%</div></div>
+    <div class="st"><div class="t">单件利润合计</div><div class="n" style="color:var(--green)">¥${fmt(sumProfit)}</div></div>
+    <div class="st"><div class="t">售价区间</div><div class="n" style="font-size:16px">${total?('¥'+fmt0(Math.min(...prices))+' – ¥'+fmt0(Math.max(...prices))):'—'}</div></div>`;
+
+  const cmp = {
+    new:(a,b)=>(b.savedAt||0)-(a.savedAt||0),
+    marginDesc:(a,b)=>(b.margin||0)-(a.margin||0),
+    marginAsc:(a,b)=>(a.margin||0)-(b.margin||0),
+    priceAsc:(a,b)=>(a.priceCNY||0)-(b.priceCNY||0),
+    priceDesc:(a,b)=>(b.priceCNY||0)-(a.priceCNY||0),
+    name:(a,b)=>String(a.name).localeCompare(String(b.name),'zh')
+  }[$('sort').value];
+  list = list.slice().sort(cmp);
+
+  $('cnt').textContent = `显示 ${list.length} / ${total}`;
+
+  if (!list.length){
+    $('grid').innerHTML = `<div class="empty">${total?'没有匹配的产品':'还没有存档。点右上角「＋ 新增产品」录入，或在测算工具里保存后同步到这里。'}</div>`;
+    return;
+  }
+
+  $('grid').innerHTML = list.map(a=>{
+    const p = a.priceCNY||0;
+    const seg = [
+      {k:'利润',v:a.profit,c:'#0a8f5b'},
+      {k:'平台费',v:a.platFee,c:'#e0342b'},
+      {k:'中国运费',v:a.shipCNY,c:'#f2711c'},
+      {k:'本地运费',v:a.localFee,c:'#f9a03f'},
+      {k:'采购价',v:a.purchase,c:'#1a6dff'}
+    ];
+    const bar = seg.map(s=>`<i style="width:${Math.min(100,Math.max(0,(s.v||0)/p*100))}%;background:${s.c}" title="${s.k} ¥${fmt(s.v)}"></i>`).join('');
+    const lg = seg.map(s=>`<span><em style="background:${s.c}"></em>${s.k} ¥${fmt(s.v)}</span>`).join('');
+    const isNew = newIds.includes(a.id);
+    return `<div class="pcard">
+      ${isNew?'<span class="badge new">NEW</span>':''}
+      <div class="ph">
+        <div style="min-width:0">
+          <div class="pn">${esc(a.name)}</div>
+          <div class="pm">${a.d1||'-'}×${a.d2||'-'}×${a.d3||'-'}cm · ${a.w||'-'}kg · 货值¥${fmt0(a.declCNY)} · ${esc(a.channelCN||'')}</div>
+        </div>
+        <div class="pp"><div class="v">¥${fmt(p)}</div><div class="s">≈ ₽${fmt0(a.priceRUB)}</div></div>
+      </div>
+      <div class="pb">
+        <div class="mini-bar">${bar}</div>
+        <div class="legend">${lg}</div>
+        <div class="prow"><span>利润</span><b style="color:${a.profit>=0?'var(--green)':'var(--red)'}">¥${fmt(a.profit)} <span class="badge ${mcls(a.margin)}">${((a.margin||0)*100).toFixed(1)}%</span></b></div>
+        <div class="prow"><span>平台费合计</span><b>¥${fmt(a.platFee)}</b></div>
+        <div class="prow"><span>中国运费 · ${esc(a.speed||'')}</span><b>¥${fmt(a.shipCNY)}</b></div>
+        <div class="prow"><span>深圳本地运费 + 采购价</span><b>¥${fmt((a.localFee||0)+(a.purchase||0))}</b></div>
+        <div class="prow" style="color:var(--ink-3);font-size:10.5px;margin-top:3px"><span>${a.savedAt?new Date(a.savedAt).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}):''}</span><span>计费重 ${a.billable||'-'}kg</span></div>
+      </div>
+      <div class="pf">
+        <button data-act="edit" data-id="${a.id}">编辑</button>
+        <button data-act="dup" data-id="${a.id}">复制</button>
+        <button data-act="del" data-id="${a.id}" style="color:var(--red)">删除</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  $('grid').querySelectorAll('button[data-act]').forEach(b=>{
+    b.addEventListener('click', ()=> handleCardAction(b.dataset.act, b.dataset.id));
+  });
+}
+
+async function handleCardAction(act, id){
+  const rec = DATA.find(x=>x.id===id);
+  if (!rec) return;
+  if (act === 'edit') return openModal(rec);
+  if (act === 'del'){
+    if (!confirm(`删除「${rec.name}」？该操作会同步删除服务器上的记录，无法恢复。`)) return;
+    try{ await api('/api/archive/'+encodeURIComponent(id), {method:'DELETE'}); toast('已删除'); load(true); }
+    catch(e){ toast('删除失败：'+e.message); }
+  }
+  if (act === 'dup'){
+    const copy = Object.assign({}, rec, {id: undefined, name: rec.name + '（副本）', savedAt: Date.now()});
+    try{ await api('/api/archive', {method:'POST', body: JSON.stringify({item: copy})}); toast('已复制'); load(true); }
+    catch(e){ toast('复制失败：'+e.message); }
+  }
+}
+
+/* ---------- 编辑 / 新增 ---------- */
+const FIELDS = [
+  {k:'name',      t:'产品名称',       d:'',   type:'text'},
+  {k:'priceCNY',  t:'售价 ¥',         d:'0',  type:'number'},
+  {k:'purchase',  t:'采购价 ¥',       d:'0',  type:'number'},
+  {k:'localFee',  t:'深圳本地运费 ¥', d:'3.3',type:'number'},
+  {k:'shipCNY',   t:'中国运费 ¥',     d:'0',  type:'number'},
+  {k:'platFee',   t:'平台费 ¥',       d:'0',  type:'number'},
+  {k:'profit',    t:'利润 ¥',         d:'0',  type:'number'},
+  {k:'marginPct', t:'利润占比 %',     d:'30', type:'number'},
+  {k:'d1',        t:'长 cm',          d:'16', type:'number'},
+  {k:'d2',        t:'宽 cm',          d:'11', type:'number'},
+  {k:'d3',        t:'高 cm',          d:'8',  type:'number'},
+  {k:'w',         t:'实重 kg',        d:'0.3',type:'number'},
+  {k:'declCNY',   t:'货值 ¥',         d:'30', type:'number'},
+  {k:'channelCN', t:'渠道',           d:'',   type:'text'},
+  {k:'speed',     t:'时效',           d:'',   type:'text'},
+  {k:'billable',  t:'计费重 kg',      d:'0',  type:'number'},
+];
+
+let editingId = null;
+function openModal(rec){
+  editingId = rec ? rec.id : null;
+  $('mTitle').textContent = rec ? '编辑产品定价' : '新增产品';
+  $('mFields').innerHTML = FIELDS.map(f=>{
+    let v = '';
+    if (rec){
+      if (f.k === 'marginPct') v = ((rec.margin||0)*100).toFixed(1);
+      else v = rec[f.k] == null ? '' : rec[f.k];
+    } else if (rec === null && f.d !== '') v = f.d;
+    return `<div><label>${f.t}</label><input data-k="${f.k}" type="${f.type}" value="${esc(v)}" ${f.type==='number'?'step="0.01"':''}></div>`;
+  }).join('');
+  $('modal').classList.add('on');
+  setTimeout(()=>{ const first = $('mFields').querySelector('[data-k="name"]'); if (first) first.focus(); }, 30);
+}
+$('mCancel').addEventListener('click', ()=> $('modal').classList.remove('on'));
+$('modal').addEventListener('click', e=>{ if (e.target.id==='modal') $('modal').classList.remove('on'); });
+
+$('mSave').addEventListener('click', async ()=>{
+  const out = {};
+  $('mFields').querySelectorAll('input').forEach(inp=>{
+    const k = inp.dataset.k;
+    out[k] = inp.type === 'number' ? (parseFloat(inp.value)||0) : inp.value.trim();
+  });
+  if (!out.name){ alert('请填写产品名称'); return; }
+  // 由已填项自动补齐派生值
+  const p = out.priceCNY || 0;
+  out.margin = (out.marginPct||0)/100;
+  if (!out.platFee && p) {
+    // 未填平台费时按 24.2% 估
+    out.platFee = +(p*0.242).toFixed(2);
+  }
+  if (!out.profit && p) out.profit = +(p - (out.platFee||0) - (out.shipCNY||0) - (out.localFee||0) - (out.purchase||0)).toFixed(2);
+  if (!out.margin && p) out.margin = out.profit/p;
+  delete out.marginPct;
+  out.priceRUB = out.priceRUB || (p * (out.rate || 12.45));
+  out.rate = out.rate || 12.45;
+  out.vol = out.vol || ((out.d1*out.d2*out.d3)/12000);
+  out.targetMargin = out.targetMargin || 0.3;
+  out.savedAt = out.savedAt || Date.now();
+
+  try{
+    if (editingId){
+      await api('/api/archive/' + encodeURIComponent(editingId), {method:'PUT', body: JSON.stringify({item: out})});
+    } else {
+      await api('/api/archive', {method:'POST', body: JSON.stringify({item: out})});
+    }
+    $('modal').classList.remove('on');
+    toast('已保存并同步');
+    firstLoad = true; knownIds = new Set();
+    load(true);
+  }catch(e){ alert('保存失败：' + e.message); }
+});
+
+/* ---------- 工具栏 ---------- */
+$('btnAdd').addEventListener('click', ()=> openModal(null));
+$('btnRefresh').addEventListener('click', ()=>{ load(true); toast('已刷新'); });
+$('btnLogout').addEventListener('click', ()=>{
+  localStorage.removeItem('ozon_server_token'); TOKEN=''; showLogin();
+});
+$('q').addEventListener('input', ()=> render());
+$('sort').addEventListener('change', ()=> render());
+
+$('btnExportCsv').addEventListener('click', ()=>{
+  if (!DATA.length) return toast('没有数据可导出');
+  const head = ['产品名称','长cm','宽cm','高cm','实重kg','货值¥','渠道','时效','计费重kg','中国运费¥','深圳本地运费¥','采购价¥','平台费¥','售价¥','售价₽','利润¥','利润占比','保存时间'];
+  const rows = DATA.map(a=>[a.name,a.d1,a.d2,a.d3,a.w,a.declCNY,a.channelCN,a.speed,a.billable,a.shipCNY,a.localFee,a.purchase,a.platFee,a.priceCNY,a.priceRUB,a.profit,(a.margin*100).toFixed(1)+'%',a.savedAt?new Date(a.savedAt).toLocaleString('zh-CN'):'']);
+  const csv = '\ufeff' + [head, ...rows].map(r=>r.map(v=>{
+    const s = String(v==null?'':v);
+    return /[",\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+  }).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = '定价存档_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1500);
+});
+
+$('btnImportFile').addEventListener('click', ()=> $('fileImport').click());
+$('fileImport').addEventListener('change', e=>{
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = async ()=>{
+    try{
+      const data = JSON.parse(r.result);
+      const res = await api('/api/import', {method:'POST', body: JSON.stringify(data)});
+      toast(`导入完成：新增 ${res.added} 条，更新 ${res.updated} 条`);
+      firstLoad = true; knownIds = new Set(); load(true);
+    }catch(err){ alert('导入失败：' + err.message); }
+  };
+  r.readAsText(f);
+  e.target.value = '';
+});
+
+/* ---------- 启动 ---------- */
+(async function init(){
+  if (!TOKEN){ showLogin(); return; }
+  try{
+    const s = await api('/api/session');
+    if (s.ok) enterMain(); else showLogin();
+  }catch(e){ showLogin(); }
+})();
+</script>
+</body>
+</html>
